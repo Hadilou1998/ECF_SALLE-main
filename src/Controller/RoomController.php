@@ -12,9 +12,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 #[Route('/room')]
-final class RoomController extends AbstractController
+class RoomController extends AbstractController
 {
     #[Route('/', name: 'app_room_index', methods: ['GET', 'POST'])]
     public function index(Request $request, RoomRepository $roomRepository): Response
@@ -54,17 +55,23 @@ final class RoomController extends AbstractController
             'form' => $form,
         ]);
     }
+
     #[Route('/{id}', name: 'app_room_show', methods: ['GET'])]
-    public function show(Room $room): Response
+    public function show($id, RoomRepository $roomRepository): Response
     {
+        $room = $roomRepository->findOrFail($id);
+
         return $this->render('room/show.html.twig', [
             'room' => $room,
         ]);
     }
 
     #[Route('/{id}/edit', name: 'app_room_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Room $room, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, $id, RoomRepository $roomRepository, Room $room, EntityManagerInterface $entityManager): Response
     {
+        $room = $roomRepository->findOrFail($id);
+
+        // No changes needed here; Room will be injected by ParamConverter
         $form = $this->createForm(RoomType::class, $room);
         $form->handleRequest($request);
 
@@ -83,7 +90,7 @@ final class RoomController extends AbstractController
     #[Route('/{id}', name: 'app_room_delete', methods: ['POST'])]
     public function delete(Request $request, Room $room, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$room->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$room->getId(), $request->request->get('_token'))) {
             $entityManager->remove($room);
             $entityManager->flush();
         }
@@ -104,9 +111,11 @@ final class RoomController extends AbstractController
             $searchPerformed = true;
             $criteria = $form->getData();
             
+            // Obtenez les chambres basées sur les critères de recherche
             $rooms = $roomRepository->searchRooms($criteria);
             
             foreach ($rooms as $room) {
+                // Vérifiez la disponibilité de chaque chambre
                 $availability = $this->getRoomAvailability($room, $reservationRepository);
                 if (!empty($availability)) {
                     $availableRooms[$room->getId()] = [

@@ -5,12 +5,22 @@ namespace App\Repository;
 use App\Entity\Room;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class RoomRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Room::class);
+    }
+
+    public function findOrFail($id): Room
+    {
+        $room = $this->find($id);
+        if (!$room) {
+            throw new NotFoundHttpException('Room not found');
+        }
+        return $room;
     }
 
     public function searchRooms(array $criteria)
