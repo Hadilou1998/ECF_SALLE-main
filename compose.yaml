@@ -1,47 +1,54 @@
 services:
   web:
     build: .
+    container_name: symfony_web
     ports:
       - "8000:80"
     volumes:
       - .:/var/www/html
+      - ./apache.conf:/etc/apache2/sites-available/000-default.conf
     depends_on:
       database:
         condition: service_healthy
-      mailer:
-        condition: service_started
     environment:
-      DATABASE_URL: "mysql://root:supersaiyan@database:3306/db_shy?serverVersion=8.0"
-      MAILER_DSN: "smtp://mailer:1025"
+      - APP_ENV=dev
+      - DATABASE_URL=mysql://root:supersaiyan@database:3306/db_shy?serverVersion=8.0
+    networks:
+      - symfony_network
 
   database:
     image: mysql:8.0
-    command: --default-authentication-plugin=mysql_native_password
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: db_shy
+    container_name: symfony_db
+    platform: linux/x86_64
     ports:
       - "3307:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=supersaiyan
+      - MYSQL_DATABASE=db_shy
     volumes:
-      - db-data:/var/lib/mysql
+      - db_data:/var/lib/mysql
       - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-psupersaiyan"]
-      interval: 5s
+      interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - symfony_network
 
   mailer:
     image: mailhog/mailhog
+    container_name: symfony_mailer
     ports:
       - "1025:1025"
       - "8025:8025"
-    environment:
-      MH_STORAGE: maildir
-      MH_MAILDIR_PATH: /tmp
-    volumes:
-      - mailhog_data:/tmp
+    networks:
+      - symfony_network
+
+networks:
+  symfony_network:
+    driver: bridge
 
 volumes:
-  db-data:
-  mailhog_data:
+  db_data:
+    driver: local

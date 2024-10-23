@@ -1,4 +1,9 @@
-CREATE DATABASE IF NOT EXISTS db_shy;
-ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'supersaiyan';
-GRANT ALL PRIVILEGES ON db_shy.* TO 'root'@'%' WITH GRANT OPTION;
+-- Supprimer la base si elle existe déjà
+DROP DATABASE IF EXISTS db_shy;
+
+-- Créer la base de données
+CREATE DATABASE db_shy;
+
+-- Privilèges pour l'utilisateur
+GRANT ALL PRIVILEGES ON db_shy.* TO 'root'@'%';
 FLUSH PRIVILEGES;
