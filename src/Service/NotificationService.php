@@ -3,7 +3,6 @@
 namespace App\Service;
 
 use App\Entity\Reservation;
-use App\Entity\AdminNotification;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
@@ -21,19 +20,36 @@ class NotificationService
         $this->entityManager = $entityManager;
     }
 
+    public const STATUS_PENDING = 'pending';
+
     public function notifyAdminsOfPendingReservations(array $reservations): void
     {
-        // Create in-app notification
-        $notification = new AdminNotification();
-        $notification->setType('pending_reservations');
-        $notification->setMessage(sprintf(
-            'Vous avez %d réservation(s) en attente qui nécessite(nt) votre attention.',
-            count($reservations)
-        ));
-        $notification->setCreatedAt(new \DateTimeImmutable());
+        // Create a query to fetch pending reservations
+        $pendingReservationsQuery = $this->entityManager->getRepository(Reservation::class)
+            ->createQueryBuilder('r')
+            ->where('r.status = :pending')
+            ->setParameter('pending', self::STATUS_PENDING)
+            ->getQuery();
 
-        $this->entityManager->persist($notification);
-        $this->entityManager->flush();
+        $reservations = $pendingReservationsQuery->getResult();
+
+        // Check if any pending reservations exist
+        if (empty($reservations)) {
+            return;
+        }
+
+        // Sort reservations by start date
+        usort($reservations, function (Reservation $a, Reservation $b) {
+            return $a->getStartDate()->diff($b->getStartDate())->days;
+        });
+
+        // Limit to the first 10 reservations
+        $reservations = array_slice($reservations, 0, 10);
+
+        // Save the updated status for the reservations
+        foreach ($reservations as $reservation) {
+            $reservation->setStatus(Reservation::STATUS_CONFIRMED);
+        }
 
         // Send email
         $this->sendEmailNotification($reservations);
