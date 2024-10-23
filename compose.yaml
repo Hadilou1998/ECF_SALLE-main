@@ -1,79 +1,47 @@
 services:
-  app:
-    build:
-<<<<<<< HEAD
-      context: .
-      dockerfile: Dockerfile
+  web:
+    build: .
+    ports:
+      - "8000:80"
     volumes:
       - .:/var/www/html
-    networks:
-      - app-network
-    ports:
-      - "8000:8000"  # Mapper le port 8000 du conteneur au port 8000 de l'hôte
-=======
-<<<<<<< HEAD
-      context: .  # Le contexte de construction est le répertoire actuel
-      dockerfile: Dockerfile  # Assurez-vous que le fichier s'appelle Dockerfile
-    image: php:8.3-apache
-    ports:
-      - "8000:8000" # Redirection du port 8000 du conteneur vers le port 8000 de votre machine locale 
     depends_on:
-      - database # Attendre que la base de données soit prête avant de démarrer l'application
-=======
-      context: .
-      dockerfile: Dockerfile
-    volumes:
-      - .:/var/www/html
-    networks:
-      - app-network
-    ports:
-      - "8000:8000"  # Mapper le port 8000 du conteneur au port 8000 de l'hôte
->>>>>>> c2ca0c2 (Updated and modify docker)
->>>>>>> origin/main
+      database:
+        condition: service_healthy
+      mailer:
+        condition: service_started
+    environment:
+      DATABASE_URL: "mysql://root:supersaiyan@database:3306/db_shy?serverVersion=8.0"
+      MAILER_DSN: "smtp://mailer:1025"
 
   database:
     image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
     environment:
-<<<<<<< HEAD
-      MYSQL_ROOT_PASSWORD: supersaiyan
+      MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: db_shy
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
-=======
-<<<<<<< HEAD
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
-      MYSQL_DATABASE: ${MYSQL_DB:-db_shy}
->>>>>>> origin/main
+    ports:
+      - "3307:3306"
     volumes:
-      - db_data:/var/lib/mysql
-    networks:
-      - app-network
+      - db-data:/var/lib/mysql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-psupersaiyan"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
-<<<<<<< HEAD
-networks:
-  app-network:
-    driver: bridge
-=======
   mailer:
-    image: axllent/mailpit
+    image: mailhog/mailhog
     ports:
       - "1025:1025"
       - "8025:8025"
-=======
-      MYSQL_ROOT_PASSWORD: supersaiyan
-      MYSQL_DATABASE: db_shy
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
+    environment:
+      MH_STORAGE: maildir
+      MH_MAILDIR_PATH: /tmp
     volumes:
-      - db_data:/var/lib/mysql
-    networks:
-      - app-network
-
-networks:
-  app-network:
-    driver: bridge
->>>>>>> c2ca0c2 (Updated and modify docker)
->>>>>>> origin/main
+      - mailhog_data:/tmp
 
 volumes:
-  db_data:
+  db-data:
+  mailhog_data:

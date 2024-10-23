@@ -1,0 +1,4 @@
+CREATE DATABASE IF NOT EXISTS db_shy;
+ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'supersaiyan';
+GRANT ALL PRIVILEGES ON db_shy.* TO 'root'@'%' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
