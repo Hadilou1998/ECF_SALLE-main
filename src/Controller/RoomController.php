@@ -29,6 +29,18 @@ class RoomController extends AbstractController
         } else {
             $rooms = $roomRepository->findAll();
         }
+
+        // Suppression des doublons
+        $uniqueRooms = [];
+        foreach ($rooms as $room) {
+            $roomName = $room->getName(); // ou un autre identifiant unique
+            if (!isset($uniqueRooms[$roomName])) {
+                $uniqueRooms[$roomName] = $room;
+            }
+        }
+        
+        // Convertir le tableau en indices numériques
+        $rooms = array_values($uniqueRooms);
     
         return $this->render('room/search.html.twig', [
             'rooms' => $rooms,
@@ -59,7 +71,7 @@ class RoomController extends AbstractController
     #[Route('/{id}', name: 'app_room_show', methods: ['GET'])]
     public function show($id, RoomRepository $roomRepository): Response
     {
-        $room = $roomRepository->findOrFail($id);
+        $room = $roomRepository->find($id);
 
         return $this->render('room/show.html.twig', [
             'room' => $room,
@@ -69,9 +81,7 @@ class RoomController extends AbstractController
     #[Route('/{id}/edit', name: 'app_room_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, $id, RoomRepository $roomRepository, Room $room, EntityManagerInterface $entityManager): Response
     {
-        $room = $roomRepository->findOrFail($id);
-
-        // No changes needed here; Room will be injected by ParamConverter
+        // Pas de changements nécessaires ici ; Room sera injecté par ParamConverter
         $form = $this->createForm(RoomType::class, $room);
         $form->handleRequest($request);
 
@@ -113,6 +123,18 @@ class RoomController extends AbstractController
             
             // Obtenez les chambres basées sur les critères de recherche
             $rooms = $roomRepository->searchRooms($criteria);
+            
+            // Suppression des doublons
+            $uniqueRooms = [];
+            foreach ($rooms as $room) {
+                $roomName = $room->getName(); // ou un autre identifiant unique
+                if (!isset($uniqueRooms[$roomName])) {
+                    $uniqueRooms[$roomName] = $room;
+                }
+            }
+
+            // Convertir le tableau en indices numériques
+            $rooms = array_values($uniqueRooms);
             
             foreach ($rooms as $room) {
                 // Vérifiez la disponibilité de chaque chambre
@@ -161,7 +183,7 @@ class RoomController extends AbstractController
 
         $currentSlot = clone $dayStart;
         while ($currentSlot < $dayEnd) {
-            $slotEnd = (clone $currentSlot)->modify('+1 hour');
+            $slotEnd = (clone $currentSlot)->modify('+1 heure');
             $isAvailable = true;
 
             foreach ($reservations as $reservation) {

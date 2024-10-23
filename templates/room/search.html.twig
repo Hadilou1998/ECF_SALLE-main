@@ -4,8 +4,9 @@
 
 {% block body %}
     <div class="container mt-4">
+        <!-- Afficher une seule fois le titre du système de réservation -->
         <h1 id="page-title">Recherche de salles</h1>
-
+        
         <div id="search-form-container">
             {{ form_start(form, {'attr': {'id': 'search-form', 'data-turbo': 'false'}}) }}
             {{ form_errors(form) }}
@@ -24,56 +25,4 @@
             <a href="{{ path('app_room_new') }}" class="btn btn-success">Créer une nouvelle salle</a>
         </div>
     </div>
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const form = document.getElementById('search-form');
-            const formContainer = document.getElementById('search-form-container');
-            const resultsContainer = document.getElementById('results-container');
-            const searchButton = document.getElementById('search-button');
-            const pageTitle = document.getElementById('page-title');
-
-            form.addEventListener('submit', function (e) {
-                e.preventDefault();
-                console.log('Form submitted');
-
-                const formData = new FormData(form);
-                console.log('Form data:', Object.fromEntries(formData));
-
-                fetch(form.action, {
-                    method: form.method,
-                    body: formData,
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                }).then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.text();
-                }).then(html => {
-                    console.log('Response received');
-                    resultsContainer.innerHTML = html;
-                    resultsContainer.style.display = 'block';
-                    formContainer.style.display = 'none';
-                    searchButton.textContent = 'Nouvelle recherche';
-                    pageTitle.style.display = 'block';
-                }).catch(error => {
-                    console.error('Error:', error);
-                });
-            });
-
-            searchButton.addEventListener('click', function (e) {
-                if (formContainer.style.display === 'none') {
-                    e.preventDefault();
-                    formContainer.style.display = 'block';
-                    resultsContainer.style.display = 'none';
-                    this.textContent = 'Rechercher';
-                }
-            });
-        });
-    </script>
 {% endblock %}
