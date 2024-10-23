@@ -10,7 +10,7 @@ use Faker\Factory;
 class RoomFixtures extends Fixture
 {
     public const ROOM_REFERENCE = 'room_reference';
-
+    
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create();

@@ -3,12 +3,10 @@
 namespace App\DataFixtures;
 
 use App\Entity\Reservation;
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Persistence\ObjectManager;
-use App\DataFixtures\UserFixtures;
-use App\DataFixtures\RoomFixtures;
 use App\Entity\User;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 
 class ReservationFixtures extends Fixture implements DependentFixtureInterface
