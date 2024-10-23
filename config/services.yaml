@@ -1,15 +1,11 @@
 services:
-    _defaults:
-        autowire: true
-        autoconfigure: true
+    # _defaults:
+        # autowire: true
+        # autoconfigure: true
 
     App\:
         resource: '../src/'
-        exclude:
-            - '../src/DependencyInjection/'
-            - '../src/Entity/'
-            - '../src/Kernel.php'
-            - '../src/Tests/'
+        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
 
     App\Service\NotificationService:
         arguments:
