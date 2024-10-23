@@ -4,63 +4,6 @@
 {% endblock %}
 
 {% block body %}
-<<<<<<< HEAD
-<div class="container mt-5">
-    <h1 class="mb-4">Bienvenue sur le Système de Réservation de Salles</h1>
-    
-    {% if not app.user %}
-    <div class="row mb-4">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Accès au compte</h5>
-                    <p class="card-text">Connectez-vous ou créez un compte pour commencer à réserver des salles.</p>
-                    <a href="{{ path('app_login') }}" class="btn btn-primary mr-2">Connexion</a>
-                    <a href="{{ path('app_register') }}" class="btn btn-secondary">Inscription</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    {% endif %}
-    
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h5 class="card-title">Rechercher une salle</h5>
-                    <p class="card-text">Trouvez la salle parfaite pour votre événement.</p>
-                    <a href="{{ path('app_room_index') }}" class="btn btn-primary">Rechercher</a>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-md-6">
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h5 class="card-title">Mes réservations</h5>
-                    <p class="card-text">Consultez et gérez vos réservations actuelles.</p>
-                    <a href="{{ path('app_reservation_index') }}" class="btn btn-secondary">Voir mes réservations</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    {% if is_granted('ROLE_ADMIN') %}
-    <div class="row mt-4">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Administration</h5>
-                    <p class="card-text">Accédez au panneau d'administration.</p>
-                    <a href="{{ path('admin_dashboard') }}" class="btn btn-info">Tableau de bord admin</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    {% endif %}
-</div>
-{% endblock %}
-=======
 	<div class="container mt-5">
 		<h1 class="mb-4">Bienvenue sur le Système de Réservation de Salles</h1>
 
@@ -116,4 +59,3 @@
 		{% endif %}
 	</div>
 {% endblock %}
->>>>>>> origin/main
