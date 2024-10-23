@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
+    </head>
+    <body>
+        <nav class="bg-blue-600 p-4 text-white">
+            <div class="container mx-auto flex justify-between">
+                <a href="{{ path('app_home') }}" class="text-lg font-bold">Room Reservation System</a>
+                <div>
+                    <a href="{{ path('app_room_availability') }}">Consulter les disponibilités</a>
+                    <a href="{{ path('app_room_index') }}" class="mr-4">Search Rooms</a>
+                    {% if is_granted('ROLE_USER') %}
+                        <a href="{{ path('app_reservation_index') }}" class="mr-4">My Reservations</a>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <a href="{{ path('admin_dashboard') }}" class="mr-4">Admin Dashboard</a>
+                        {% endif %}
+                        <a href="{{ path('app_logout') }}">Logout</a>
+                    {% else %}
+                        <a href="{{ path('app_login') }}">Login</a>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+
+        <div class="container mx-auto mt-8">
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="bg-{{ label == 'success' ? 'green' : 'red' }}-100 border border-{{ label == 'success' ? 'green' : 'red' }}-400 text-{{ label == 'success' ? 'green' : 'red' }}-700 px-4 py-3 rounded mb-4" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
+            {% block body %}{% endblock %}
+        </div>
+    </body>
+</html>

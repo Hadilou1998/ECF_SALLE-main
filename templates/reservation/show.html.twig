@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la réservation{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Détails de la réservation</h1>
+
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>ID</th>
+                    <td>{{ reservation.id }}</td>
+                </tr>
+                <tr>
+                    <th>Date de début</th>
+                    <td>{{ reservation.startDate|date('Y-m-d H:i') }}</td>
+                </tr>
+                <tr>
+                    <th>Date de fin</th>
+                    <td>{{ reservation.endDate|date('Y-m-d H:i') }}</td>
+                </tr>
+                <tr>
+                    <th>Statut</th>
+                    <td>{{ reservation.status }}</td>
+                </tr>
+                <tr>
+                    <th>Salle</th>
+                    <td>{{ reservation.room.name }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <a href="{{ path('app_reservation_index') }}" class="btn btn-secondary">Retour à la liste</a>
+
+        {% if is_granted('EDIT', reservation) %}
+            <a href="{{ path('app_reservation_edit', {'id': reservation.id}) }}" class="btn btn-warning">Modifier</a>
+        {% endif %}
+
+        {% if is_granted('CANCEL', reservation) %}
+            <form method="post" action="{{ path('app_reservation_cancel', {'id': reservation.id}) }}" style="display: inline-block">
+                <input type="hidden" name="_token" value="{{ csrf_token('cancel' ~ reservation.id) }}">
+                <button type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir annuler cette réservation ?')">Annuler</button>
+            </form>
+        {% endif %}
+    </div>
+{% endblock %}

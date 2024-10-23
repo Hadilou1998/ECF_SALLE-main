@@ -1,0 +1,17 @@
+[33mcommit e8d9fe83d6040c722be7d93e375e2dbe71b1e24f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m)[m
+Author: SYED Salman <syedsalman8986@gmail.com>
+Date:   Tue Oct 15 12:01:31 2024 +0200
+
+    Implémentation UML Structure de base Entité
+
+[33mcommit ee4e683666235b7ed42f43d6260da5e52b517911[m
+Author: SYED Salman <syedsalman8986@gmail.com>
+Date:   Tue Oct 15 10:27:28 2024 +0200
+
+    Add webapp packages
+
+[33mcommit b2d771f4cc9df49033aee9a4990d60cb4a84851d[m
+Author: SYED Salman <syedsalman8986@gmail.com>
+Date:   Tue Oct 15 10:26:30 2024 +0200
+
+    Add initial set of files

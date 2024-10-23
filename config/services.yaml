@@ -1,0 +1,32 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+            - '../src/Tests/'
+
+    App\Service\NotificationService:
+        arguments:
+            $mailer: '@mailer'
+            $entityManager: '@doctrine.orm.entity_manager'
+
+    App\Service\RoomAvailabilityService:
+        arguments:
+            $reservationRepository: '@App\Repository\ReservationRepository'
+            $notificationService: '@App\Service\NotificationService'
+
+    App\EventSubscriber\ReservationCheckSubscriber:
+        arguments:
+            $roomAvailabilityService: '@App\Service\RoomAvailabilityService'
+            $session: '@session.factory'
+
+    App\Service\ScheduledTasksService:
+        arguments:
+            $roomAvailabilityService: '@App\Service\RoomAvailabilityService'
+            $session: '@session.factory'

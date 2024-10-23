@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la salle{% endblock %}
+
+{% block body %}
+    <h1>Détails de la salle</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Nom</th>
+                <td>{{ room.name }}</td>
+            </tr>
+            <tr>
+                <th>Capacité</th>
+                <td>{{ room.capacity }}</td>
+            </tr>
+            <tr>
+                <th>Équipements</th>
+                <td>{{ room.equipment|join(', ') }}</td>
+            </tr>
+            <tr>
+                <th>Ergonomie</th>
+                <td>{{ room.ergonomics|join(', ') }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_room_index') }}" class="btn btn-secondary">Retour à la liste</a>
+    <a href="{{ path('app_room_edit', {'id': room.id}) }}" class="btn btn-primary">Modifier</a>
+
+    {{ include('room/_delete_form.html.twig') }}
+{% endblock %}

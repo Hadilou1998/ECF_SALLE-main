@@ -1,0 +1,33 @@
+{% if not hideTitle|default(false) %}
+	<h2>Résultats de la recherche</h2>
+{% endif %}
+
+{% if rooms|length > 0 %}
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Nom</th>
+				<th>Capacité</th>
+				<th>Équipements</th>
+				<th>Ergonomie</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for room in rooms %}
+				<tr>
+					<td>{{ room.name }}</td>
+					<td>{{ room.capacity }}</td>
+					<td>{{ room.equipment|join(', ') }}</td>
+					<td>{{ room.ergonomics|join(', ') }}</td>
+					<td>
+						<a href="{{ path('app_room_show', {'id': room.id}) }}" class="btn btn-sm btn-info">Voir</a>
+						<a href="{{ path('app_room_edit', {'id': room.id}) }}" class="btn btn-sm btn-warning">Modifier</a>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% else %}
+	<p>Aucune salle trouvée.</p>
+{% endif %}

@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pré-réservation de la salle{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1 class="mb-4">
+        Pré-réservation de la salle : {{ room.name }}
+        <span class="badge bg-warning text-dark">Pré-réservation</span>
+    </h1>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h2 class="mb-0">Détails de la salle</h2>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>Capacité :</strong> {{ room.capacity }} personnes</li>
+                    <li class="list-group-item"><strong>Équipements :</strong> {{ room.equipment|join(', ') }}</li>
+                    <li class="list-group-item"><strong>Ergonomie :</strong> {{ room.ergonomics }}</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">Formulaire de pré-réservation</h2>
+                </div>
+                <div class="card-body">
+                    {{ form_start(form) }}
+                    {{ form_row(form.startDate) }}
+                    {{ form_row(form.endDate) }}
+                    {% if form.purpose is defined %}
+                        {{ form_row(form.purpose) }}
+                    {% endif %}
+                    <button type="submit" class="btn btn-primary mt-3">Pré-réserver</button>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-5">
+        <h2>Disponibilités de la salle</h2>
+        <div id="calendar"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            events: '/api/reservations', // Assurez-vous d'avoir un endpoint qui renvoie les réservations au format attendu par FullCalendar
+            eventClassNames: function(arg) {
+                if (arg.event.extendedProps.status === 'confirmed') {
+                    return ['bg-success'];
+                } else if (arg.event.extendedProps.status === 'pending') {
+                    return ['bg-warning', 'text-dark'];
+                }
+                return ['bg-secondary'];
+            },
+            eventContent: function(arg) {
+                return {
+                    html: `
+                        <b>${arg.event.title}</b><br>
+                        <span class="badge ${arg.event.extendedProps.status === 'confirmed' ? 'bg-success' : (arg.event.extendedProps.status === 'pending' ? 'bg-warning text-dark' : 'bg-secondary')}">
+                            ${arg.event.extendedProps.status}
+                        </span>
+                    `
+                };
+            }
+        });
+        calendar.render();
+    });
+</script>
+{% endblock %}

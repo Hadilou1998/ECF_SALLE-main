@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle salle{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Créer une nouvelle salle</h1>
+
+        {{ include('room/_form.html.twig') }}
+
+        <a href="{{ path('app_room_index') }}" class="btn btn-secondary mt-3">Retour à la liste</a>
+    </div>
+{% endblock %}

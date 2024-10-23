@@ -1,0 +1,79 @@
+services:
+  app:
+    build:
+<<<<<<< HEAD
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/var/www/html
+    networks:
+      - app-network
+    ports:
+      - "8000:8000"  # Mapper le port 8000 du conteneur au port 8000 de l'hôte
+=======
+<<<<<<< HEAD
+      context: .  # Le contexte de construction est le répertoire actuel
+      dockerfile: Dockerfile  # Assurez-vous que le fichier s'appelle Dockerfile
+    image: php:8.3-apache
+    ports:
+      - "8000:8000" # Redirection du port 8000 du conteneur vers le port 8000 de votre machine locale 
+    depends_on:
+      - database # Attendre que la base de données soit prête avant de démarrer l'application
+=======
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/var/www/html
+    networks:
+      - app-network
+    ports:
+      - "8000:8000"  # Mapper le port 8000 du conteneur au port 8000 de l'hôte
+>>>>>>> c2ca0c2 (Updated and modify docker)
+>>>>>>> origin/main
+
+  database:
+    image: mysql:8.0
+    environment:
+<<<<<<< HEAD
+      MYSQL_ROOT_PASSWORD: supersaiyan
+      MYSQL_DATABASE: db_shy
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+=======
+<<<<<<< HEAD
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: ${MYSQL_DB:-db_shy}
+>>>>>>> origin/main
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - app-network
+
+<<<<<<< HEAD
+networks:
+  app-network:
+    driver: bridge
+=======
+  mailer:
+    image: axllent/mailpit
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+=======
+      MYSQL_ROOT_PASSWORD: supersaiyan
+      MYSQL_DATABASE: db_shy
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+>>>>>>> c2ca0c2 (Updated and modify docker)
+>>>>>>> origin/main
+
+volumes:
+  db_data:

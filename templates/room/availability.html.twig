@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Disponibilité des salles{% endblock %}
+
+{% block body %}
+    <h1>Disponibilité des salles</h1>
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button type="submit" class="btn btn-primary">Rechercher</button>
+    {{ form_end(form) }}
+
+    {% if searchPerformed %}
+        {% if availableRooms is empty %}
+            <p>Aucune salle disponible ne correspond à vos critères.</p>
+        {% else %}
+            <h2>Salles disponibles</h2>
+            {% for roomData in availableRooms %}
+                <h3>{{ roomData.room.name }} (Capacité: {{ roomData.room.capacity }})</h3>
+                <ul>
+                    {% for date, slots in roomData.availability %}
+                        <li>
+                            {{ date|date('d/m/Y') }}:
+                            <ul>
+                                {% for slot in slots %}
+                                    <li>{{ slot.start }} - {{ slot.end }}</li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endfor %}
+        {% endif %}
+    {% endif %}
+{% endblock %}

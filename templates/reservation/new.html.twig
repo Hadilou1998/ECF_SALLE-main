@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Reservation{% endblock %}
+
+{% block body %}
+    <h1 class="text-3xl font-bold mb-6">Create new reservation</h1>
+
+    {{ form_start(form, {'attr': {'class': 'bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4'}}) }}
+        <div class="mb-4">
+            {{ form_label(form.room, 'Room', {'label_attr': {'class': 'block text-gray-700 text-sm font-bold mb-2'}}) }}
+            {{ form_widget(form.room, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+        </div>
+        <div class="mb-4">
+            {{ form_label(form.startDate, 'Start Date', {'label_attr': {'class': 'block text-gray-700 text-sm font-bold mb-2'}}) }}
+            {{ form_widget(form.startDate, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+        </div>
+        <div class="mb-6">
+            {{ form_label(form.endDate, 'End Date', {'label_attr': {'class': 'block text-gray-700 text-sm font-bold mb-2'}}) }}
+            {{ form_widget(form.endDate, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+        </div>
+        <div class="flex items-center justify-between">
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                Create Reservation
+            </button>
+            <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="{{ path('app_reservation_index') }}">
+                Back to list
+            </a>
+        </div>
+    {{ form_end(form) }}
+{% endblock %}

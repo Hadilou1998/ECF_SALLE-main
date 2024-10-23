@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des réservations{% endblock %}
+
+{% block body %}
+    <h1>Gestion des réservations</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Début</th>
+                <th>Fin</th>
+                <th>Statut</th>
+                <th>Salle</th>
+                <th>Utilisateur</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for reservation in reservations %}
+            <tr class="{{ reservation.status == 'confirmed' ? 'table-success' : (reservation.status == 'pending' ? 'table-warning' : '') }}">
+                <td>{{ reservation.id }}</td>
+                <td>{{ reservation.startDate|date('Y-m-d H:i') }}</td>
+                <td>{{ reservation.endDate|date('Y-m-d H:i') }}</td>
+                <td>{{ reservation.status }}</td>
+                <td>{{ reservation.room.name }}</td>
+                <td>{{ reservation.user.email }}</td>
+                <td>
+                    <a href="{{ path('admin_reservation_show', {'id': reservation.id}) }}" class="btn btn-sm btn-info">Voir</a>
+                    <a href="{{ path('admin_reservation_edit', {'id': reservation.id}) }}" class="btn btn-sm btn-warning">Modifier</a>
+                    {% if reservation.status == 'pending' %}
+                        <form method="post" action="{{ path('admin_reservation_validate', {'id': reservation.id}) }}" style="display: inline;">
+                            <input type="hidden" name="_token" value="{{ csrf_token('validate' ~ reservation.id) }}">
+                            <button class="btn btn-sm btn-success">Valider</button>
+                        </form>
+                        <form method="post" action="{{ path('admin_reservation_cancel', {'id': reservation.id}) }}" style="display: inline;">
+                            <input type="hidden" name="_token" value="{{ csrf_token('cancel' ~ reservation.id) }}">
+                            <button class="btn btn-sm btn-danger">Annuler</button>
+                        </form>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">Aucune réservation trouvée</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('admin_reservation_new') }}" class="btn btn-primary">Créer une nouvelle réservation</a>
+{% endblock %}

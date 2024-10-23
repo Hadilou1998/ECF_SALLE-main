@@ -1,0 +1,46 @@
+L'outil doit offrir aux utilisateurs la possibilité de : 
+• Réserver une salle. -O
+• Modifier ou annuler une réservation existante. -N
+• Consulter les disponibilités des salles. -O
+Les administrateurs disposeront d’un tableau de bord pour gérer l'ensemble des réservations et  configurations des salles, y co -O
+3. Fonctionnalités 
+3.1 Gestion des Réservations 
+• Réserver : Les utilisateurs doivent pouvoir sélectionner une salle, choisir la période et  réserver la salle. -O
+• Modifier / Annuler : Les utilisateurs peuvent ajuster ou annuler leurs réservations en  fonction des disponibilités. -N
+• Consulter les Disponibilités : La disponibilité des salles doit être consultable à tout  moment, permettant de visualiser les crén -N
+3.2 Rôles et Permissions 
+• Visiteur : 
+o Inscription au site pour accéder aux fonctionnalités de réservation. -O
+o Accès à une interface de consultation des salles et de leurs disponibilités. -O
+o Possibilité de poser une pré-réservation qui devra être validée par un  administrateur. -N
+• Administrateur : 
+o Accès à un tableau de bord avec les fonctionnalités CRUD (Créer, Lire, Mettre à  jour, Supprimer) pour gérer les salles, les ré -N
+o Validation ou annulation des pré-réservations. -N
+o Gestion des équipements disponibles dans les salles, notamment les logiciels,  les matériels, et les critères d'ergonomie. -O
+o Notification des pré-réservations non traitées cinq jours avant la date de  réservation. -N
+o Différenciation visuelle entre les réservations confirmées et les pré-réservations  en attente via un code couleur. -N
+3.3 Recherche et Filtres Avancés  
+• Recherche de salles selon les critères suivants : 
+o Capacité : Sélection de la capacité minimale requise. -O
+o Équipements : Filtrage en fonction des équipements disponibles (matériel,  logiciels). -O
+o Ergonomie : Sélection des salles répondant à des critères ergonomiques  spécifiques (luminosité naturelle, accessibilité PMR, -O
+4. Exigences Techniques 
+4.1 Modélisation de la Base de Données 
+• La base de données devra être modélisée et réfléchir aux entités qui devront être créées -O
+• Chaque salle doit pouvoir être associée à des équipements spécifiques (logiciels,  matériels) et à des critères d'ergonomie. -O
+• La modélisation devra permettre de gérer des équipements différents pour chaque salle. 4.2 Interface Utilisateur -O
+• Visiteur : Interface simple et intuitive permettant de consulter les salles et de faire des  réservations. -O
+• Administrateur : Tableau de bord complet pour la gestion des données, avec une  présentation visuelle des réservations en att -N
+• Notification : Alerte automatique sur le tableau de bord des administrateurs pour les  pré-réservations en attente de validation, -N
+4.3 Gestion de Version avec Git 
+• Le projet devra être versionné et partagé sur une plateforme de gestion de version telle  que GitHub. -O
+• Les membres de l'équipe doivent s'assurer de commit leurs changements régulièrement  et de respecter les bonnes pratiques -O
+• Une documentation expliquant le processus de développement avec Git et les  conventions utilisées doit être incluse. -N
+4.4 Technologies et Conception 
+• Back-end : Utilisation de symfony exigé. -N
+• Front-end : Le design peut s’appuyer sur des templates existants, l’aspect visuel n'étant  pas évalué. -O
+• UML : le diagramme UML devra être validé avant le développement, et utilisés pour la  présentation finale.-O
+5. Critères de Validation 
+• Fonctionnalités : Toutes les fonctionnalités décrites dans ce cahier des charges doivent  être implémentées. -N
+• Simplicité d’Utilisation : L'interface doit être intuitive et les utilisateurs doivent pouvoir  réserver une salle en moins de cinq clic -N
+• Fiabilité des Notifications : Les administrateurs doivent être notifiés en temps et en  heure des pré-réservations non validées. -N

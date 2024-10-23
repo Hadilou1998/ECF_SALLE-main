@@ -1,0 +1,39 @@
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Date de début</th>
+            <th>Date de fin</th>
+            <th>Statut</th>
+            <th>Salle</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for reservation in reservations %}
+        <tr class="{{ reservation.status == 'confirmed' ? 'table-success' : (reservation.status == 'pending' ? 'table-warning' : '') }}">
+            <td>{{ reservation.id }}</td>
+            <td>{{ reservation.startDate|date('Y-m-d H:i') }}</td>
+            <td>{{ reservation.endDate|date('Y-m-d H:i') }}</td>
+            <td>{{ reservation.status }}</td>
+            <td>{{ reservation.room.name }}</td>
+            <td>
+                <a href="{{ path('app_reservation_show', {'id': reservation.id}) }}" class="btn btn-sm btn-info">Voir</a>
+                {% if is_granted('EDIT', reservation) %}
+                    <a href="{{ path('app_reservation_edit', {'id': reservation.id}) }}" class="btn btn-sm btn-warning">Modifier</a>
+                {% endif %}
+                {% if is_granted('CANCEL', reservation) %}
+                    <form method="post" action="{{ path('app_reservation_cancel', {'id': reservation.id}) }}" style="display: inline-block">
+                        <input type="hidden" name="_token" value="{{ csrf_token('cancel' ~ reservation.id) }}">
+                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir annuler cette réservation ?')">Annuler</button>
+                    </form>
+                {% endif %}
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="6">Aucune réservation trouvée</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

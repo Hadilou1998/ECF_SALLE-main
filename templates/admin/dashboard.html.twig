@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-6">Admin Dashboard</h1>
+
+        {# Statistics Cards #}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h2 class="text-lg font-semibold text-gray-700">Pre-reservations</h2>
+                <p class="text-3xl font-bold text-orange-500">{{ pre_reservations_count }}</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h2 class="text-lg font-semibold text-gray-700">Confirmed Reservations</h2>
+                <p class="text-3xl font-bold text-green-500">{{ confirmed_reservations_count }}</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h2 class="text-lg font-semibold text-gray-700">Total Rooms</h2>
+                <p class="text-3xl font-bold text-blue-500">{{ rooms_count }}</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h2 class="text-lg font-semibold text-gray-700">Total Users</h2>
+                <p class="text-3xl font-bold text-purple-500">{{ users_count }}</p>
+            </div>
+        </div>
+
+<<<<<<< HEAD
+    <div class="mt-8">
+        <h2 class="text-2xl font-bold mb-4">Quick Actions</h2>
+        <a href="{{ path('app_room_index') }}" class="bg-blue-500 text-white px-4 py-2 rounded mr-2">Manage Rooms</a>
+        <a href="{{ path('admin_pending_reservations') }}" class="bg-green-500 text-white px-4 py-2 rounded">Manage Reservations</a>
+=======
+        {# Pending Reservations Section #}
+        {% if pending_reservations is not empty %}
+            <div class="bg-white rounded-lg shadow p-6 mb-8">
+                <h2 class="text-xl font-bold mb-4">Pending Reservations Requiring Attention</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="px-6 py-3 text-left">Room</th>
+                                <th class="px-6 py-3 text-left">User</th>
+                                <th class="px-6 py-3 text-left">Start Date</th>
+                                <th class="px-6 py-3 text-left">End Date</th>
+                                <th class="px-6 py-3 text-left">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for reservation in pending_reservations %}
+                                <tr class="border-b hover:bg-gray-50">
+                                    <td class="px-6 py-4">{{ reservation.room.name }}</td>
+                                    <td class="px-6 py-4">{{ reservation.user.email }}</td>
+                                    <td class="px-6 py-4">{{ reservation.startDate|date('Y-m-d H:i') }}</td>
+                                    <td class="px-6 py-4">{{ reservation.endDate|date('Y-m-d H:i') }}</td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex space-x-2">
+                                            <form method="post" action="{{ path('admin_reservation_validate', {'id': reservation.id}) }}" class="inline">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('validate' ~ reservation.id) }}">
+                                                <button class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
+                                                    Validate
+                                                </button>
+                                            </form>
+                                            <form method="post" action="{{ path('admin_reservation_cancel', {'id': reservation.id}) }}" class="inline">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('cancel' ~ reservation.id) }}">
+                                                <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+                                                    Cancel
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+
+        {# Quick Actions #}
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-bold mb-4">Quick Actions</h2>
+            <div class="flex space-x-4">
+                <a href="{{ path('app_room_index') }}" 
+                   class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                    Manage Rooms
+                </a>
+                <a href="{{ path('admin_reservation_index') }}" 
+                   class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                    Manage Reservations
+                </a>
+            </div>
+        </div>
+>>>>>>> origin/main
+    </div>
+{% endblock %}
