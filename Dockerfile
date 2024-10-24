@@ -32,3 +32,6 @@ RUN usermod -u 1000 www-data && groupmod -g 1000 www-data
 
 # Exposition du port 8000
 EXPOSE 8000
+
+# Lancement du serveur web
+CMD ["apache2-foreground"]
